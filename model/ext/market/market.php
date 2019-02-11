@@ -382,7 +382,7 @@ class market extends \model\dbconnect {
 //                continue;
 //
 //            if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
-//                \model\message::render(\model\lexi::get('', 'sys030', $user->email));
+//                \model\message::render(\model\lexi::get('', 'msg030', $user->email));
 //                continue;
 //            }
 //
@@ -395,7 +395,7 @@ class market extends \model\dbconnect {
 //                $emailstring[] = $line;
 //            }
 //
-//            \model\env::sendMail($user->name, $user->email, \model\lexi::get('', 'sys005') . ': ' . $taskname, $emailstring);
+//            \model\env::sendMail($user->name, $user->email, \model\lexi::get('', 'msg005') . ': ' . $taskname, $emailstring);
 //        }
 //    }
 
