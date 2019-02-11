@@ -22,7 +22,7 @@ class bp extends \model\dbconnect {
         $result->budgetgroup = $this->getBudgetGroup($idbg);
 
         if (!isset($result->budgetgroup)) {
-            $mssg = \model\lexi::get('g3ext/market', 'sys004') . ': ' . $idbg;
+            $mssg = \model\lexi::get('ext/market', 'sys004') . ': ' . $idbg;
             \model\message::severe('sys044', $mssg);
         }
 
@@ -47,7 +47,7 @@ class bp extends \model\dbconnect {
         }
 
         if (!$existfiscalperiod) {
-            $mssg = \model\lexi::get('g3ext/market', 'sys074') . ' ' . $idfiscalperiod;
+            $mssg = \model\lexi::get('ext/market', 'sys074') . ' ' . $idfiscalperiod;
             \model\message::severe('sys002', $mssg);
         }
 
@@ -107,7 +107,7 @@ class bp extends \model\dbconnect {
         }
 
         if ($allok !== false)
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg018'));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg018'));
     }
 
     public function getFiscalPeriodsSession() {
@@ -134,7 +134,7 @@ class bp extends \model\dbconnect {
         }
 
         if ($return !== false)
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg044', $updatefiscalperiod->fiscalname));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg044', $updatefiscalperiod->fiscalname));
     }
 
     public function deleteFiscalPeriod($idfiscalperiod) {
@@ -146,14 +146,14 @@ class bp extends \model\dbconnect {
 
         $budgetjournals = $this->getRecords('SELECT idbj FROM budgetjournal WHERE idfiscalperiod = ?', (int) $idfiscalperiod);
         if (count($budgetjournals) > 0) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'msg046', $idfiscalperiod));
+            \model\message::render(\model\lexi::get('ext/market', 'msg046', $idfiscalperiod));
         } else {
 // @TODO verify it not been included in planner
             $allok = $this->_deleteFiscalPeriod($idfiscalperiod);
 
             if ($allok !== false) {
                 $period = $this->getFiscalPeriod($idfiscalperiod);
-                (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg045', $period->fiscalname));
+                (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg045', $period->fiscalname));
             }
         }
     }
@@ -286,7 +286,7 @@ class bp extends \model\dbconnect {
 
         if ($allok) {
             $budgetbook = $this->getBudgetBook($idbb);
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg047', $budgetbook->acc, $budgetbook->name, $idfiscalperiod));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg047', $budgetbook->acc, $budgetbook->name, $idfiscalperiod));
         }
     }
 
@@ -299,7 +299,7 @@ class bp extends \model\dbconnect {
 
         $allok = $this->_deleteJournalGroup($idfiscalperiod, $budgetbooks);
         if ($allok !== false)
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg048', $budgetgroup->name, $idfiscalperiod));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg048', $budgetgroup->name, $idfiscalperiod));
     }
 
     public function setOpenningBalance($idbg, $idbb, $idfiscalperiod, $acc, $periodvalue) {
@@ -307,7 +307,7 @@ class bp extends \model\dbconnect {
         $allok = $this->_setOpenningBalance($idbb, $idfiscalperiod, $acc, $periodvalue);
 
         if ($allok !== false)
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'msg049', $budgetgroup->name, $idfiscalperiod, $acc, $periodvalue));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'msg049', $budgetgroup->name, $idfiscalperiod, $acc, $periodvalue));
     }
 
     private function _insertFiscalPeriod($updatefiscalperiod) {

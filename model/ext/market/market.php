@@ -118,11 +118,11 @@ class market extends \model\dbconnect {
 // get idcurrency and convertion to localcurrency
         $from_currency = $this->getCurrency($product->idcurrency);
         if (!isset($from_currency))
-            $product->message = \model\lexi::get('g3ext/market', 'sys018', $product->idcurrency);
+            $product->message = \model\lexi::get('ext/market', 'sys018', $product->idcurrency);
 
         $to_currency = \model\utils::firstOrDefault($from_currency->convs, \model\utils::format('$v->idcurrency === "{0}"', $localcurrency));
         if (!isset($to_currency)) {
-            $product->message = \model\lexi::get('g3ext/market', 'sys019', $product->idcurrency, $localcurrency);
+            $product->message = \model\lexi::get('ext/market', 'sys019', $product->idcurrency, $localcurrency);
         } else {
             $product->rateconv = $to_currency->value; //change unit price
             $product->idcurrency = $localcurrency;
@@ -266,7 +266,7 @@ class market extends \model\dbconnect {
             return false;
 
         if ($cartexists->idorder > 0) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'sys029'));
+            \model\message::render(\model\lexi::get('ext/market', 'sys029'));
             return false;
         }
 
@@ -299,7 +299,7 @@ class market extends \model\dbconnect {
             return false;
 
         if ($cart->idorder > 0) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'sys029'));
+            \model\message::render(\model\lexi::get('ext/market', 'sys029'));
             return false;
         }
 
@@ -325,14 +325,14 @@ class market extends \model\dbconnect {
         $targetgate = $modelaction->getGate($updatecart->toidgate);
 
         if (!isset($targetgate) || !isset($targetgate->action)) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'sys044'));
+            \model\message::render(\model\lexi::get('ext/market', 'sys044'));
             return false;
         }
 
 // security: been posted and moving to gate default
 //        if($cart->idorder > 0 & $cart->idgate !== $defaultgate & $updatecart->toidgate === $defaultgate)
         if ($cart->idorder > 0) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'sys029'));
+            \model\message::render(\model\lexi::get('ext/market', 'sys029'));
             return false;
         }
 
@@ -361,7 +361,7 @@ class market extends \model\dbconnect {
         if ($cart->idgate === $defaultgate)
             $this->endTransaction();
 
-        $texto = \model\utils::format('{0}: {1}, cart id: {2}-{3} {4}', \model\lexi::get('g3ext/market', 'sys010'), $modelaction->getGate($updatecart->toidgate)->name ?? '', $this->src->idproject, $cart->idcart, \model\env::getUserName());
+        $texto = \model\utils::format('{0}: {1}, cart id: {2}-{3} {4}', \model\lexi::get('ext/market', 'sys010'), $modelaction->getGate($updatecart->toidgate)->name ?? '', $this->src->idproject, $cart->idcart, \model\env::getUserName());
         $modelaction->addSystemNote($texto);
 
 // send email to users (under review)
@@ -649,19 +649,19 @@ class market extends \model\dbconnect {
 // @TODO close or delete order, need to deal with any fulfill
         if ($result->order->idgate === $defaultgate) {
             if (!isset($result->order->allowcommit) || !$result->order->allowcommit) {
-                \model\message::render(\model\lexi::get('g3ext/market', 'sys039'));
+                \model\message::render(\model\lexi::get('ext/market', 'sys039'));
                 return false;
             }
             $hasactionhistory = ($this->getRecord('SELECT count(*) AS result FROM taskorder JOIN task USING (idtask) WHERE taskorder.idorder = ? AND task.idgate <> ?', $result->order->idorder, $defaultgate)->result ?? 0) > 0;
             if ($hasactionhistory) {
-                \model\message::render(\model\lexi::get('g3ext/market', 'sys046'));
+                \model\message::render(\model\lexi::get('ext/market', 'sys046'));
                 return false;
             }
         }
 
         $this->executeSql('UPDATE [order] SET idgate = ?, iduser = ?, username = ? WHERE idorder = ?', $updateorder->toidgate, \model\env::getIdUser(), \model\env::getUserName(), (int) $updateorder->idorder);
 
-        $texto = \model\utils::format('{0}: {1}, order id: {2}-{3} {4}', \model\lexi::get('g3ext/market', 'sys038'), $modelaction->getGate($updateorder->toidgate)->name ?? '', $this->src->idproject, $updateorder->idorder, \model\env::getUserName());
+        $texto = \model\utils::format('{0}: {1}, order id: {2}-{3} {4}', \model\lexi::get('ext/market', 'sys038'), $modelaction->getGate($updateorder->toidgate)->name ?? '', $this->src->idproject, $updateorder->idorder, \model\env::getUserName());
         $modelaction->addSystemNote($texto);
 
 // send email to users (under review)
@@ -953,7 +953,7 @@ class market extends \model\dbconnect {
             $this->_uploadImgProduct($filename, $filesize, $tempname);
         }
 
-        (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'sys053', $updateproduct->name, $updateproduct->keycode));
+        (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'sys053', $updateproduct->name, $updateproduct->keycode));
 
 // flag for linked projects
         (new \model\action($this->src))->setSharedProjForRefresh(\model\env::MODULE_PRODUCTS, true);
@@ -964,7 +964,7 @@ class market extends \model\dbconnect {
 // Verify file size - 5MB maximum
         $maxsize = 5 * 1024 * 1024;
         if ($filesize > $maxsize) {
-            \model\message::render(\model\lexi::get('g3ext/market', 'sys054'));
+            \model\message::render(\model\lexi::get('ext/market', 'sys054'));
             $allOk = false;
         }
 
@@ -997,7 +997,7 @@ class market extends \model\dbconnect {
                 $NewImage = \imagecreatefromjpeg($tempname);
                 break;
             default:
-                \model\message::render(\model\lexi::get('g3ext/market', 'sys055'));
+                \model\message::render(\model\lexi::get('ext/market', 'sys055'));
                 return false;
 //                break;
         }
@@ -1030,7 +1030,7 @@ class market extends \model\dbconnect {
             $this->executeSql('DELETE FROM producttag WHERE idproduct = ?', (int) $idproduct);
             $this->endTransaction();
 
-            (new \model\action($this->src))->addSystemNote(\model\lexi::get('g3ext/market', 'sys056', $product->name, $product->keycode));
+            (new \model\action($this->src))->addSystemNote(\model\lexi::get('ext/market', 'sys056', $product->name, $product->keycode));
 
 // flag for linked projects
             (new \model\action($this->src))->setSharedProjForRefresh(\model\env::MODULE_PRODUCTS, true);
